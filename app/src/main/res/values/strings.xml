@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Movies Now</string>
+    <string name="toggle_textOff">Mark as favorite</string>
+    <string name="toggle_textOn">Favorite</string>
+</resources>
