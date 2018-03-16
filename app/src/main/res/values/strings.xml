@@ -2,4 +2,9 @@
     <string name="app_name">Movies Now</string>
     <string name="toggle_textOff">Mark as favorite</string>
     <string name="toggle_textOn">Favorite</string>
+    <string name="tab_trailers">Trailers</string>
+    <string name="tab_reviews">Reviews</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
