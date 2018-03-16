@@ -41,7 +41,7 @@ public class InfoFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        Movie movie = (Movie) getActivity().getIntent().getSerializableExtra("movie");
+        Movie movie = (Movie) getArguments().getSerializable("movie");
         Log.d("DATE", "onCreate: " + movie.getReleaseDate());
 
         Picasso.with(getActivity())
@@ -56,5 +56,11 @@ public class InfoFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public static InfoFragment newInstance() {
+        InfoFragment fragment = new InfoFragment();
+
+        return fragment;
     }
 }

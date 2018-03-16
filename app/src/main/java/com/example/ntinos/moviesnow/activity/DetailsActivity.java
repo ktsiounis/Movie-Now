@@ -33,18 +33,19 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
-        Bundle data = new Bundle();
-        data.putSerializable();
-
-        setTitle("Movie1");
-
         ButterKnife.bind(this);
 
+        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
+
+        Bundle data = new Bundle();
+        data.putSerializable("movie", movie);
+
+        setTitle(movie.getTitle());
+
         mDetailsPagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager());
-        mDetailsPagerAdapter.addFragment(new InfoFragment(), "Info");
-        mDetailsPagerAdapter.addFragment(new TrailersFragment(), "Trailers");
-        mDetailsPagerAdapter.addFragment(new ReviewsFragment(), "Reviews");
+        mDetailsPagerAdapter.addFragment(new InfoFragment(), "Info", data);
+        mDetailsPagerAdapter.addFragment(new TrailersFragment(), "Trailers", null);
+        mDetailsPagerAdapter.addFragment(new ReviewsFragment(), "Reviews", null);
         mViewPager.setAdapter(mDetailsPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
