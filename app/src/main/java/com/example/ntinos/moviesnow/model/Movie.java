@@ -24,8 +24,10 @@ public class Movie implements Serializable {
     private Boolean adult;
     @SerializedName("backdrop_path")
     private String backdrop;
+    @SerializedName("id")
+    private int id;
 
-    public Movie(String title, String description, String thumbnail, String voteAvg, String releaseDate, Boolean adult, String backdrop) {
+    public Movie(String title, String description, String thumbnail, String voteAvg, String releaseDate, Boolean adult, String backdrop, int id) {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -33,6 +35,12 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
         this.adult = adult;
         this.backdrop = backdrop;
+        this.id = id;
+
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {

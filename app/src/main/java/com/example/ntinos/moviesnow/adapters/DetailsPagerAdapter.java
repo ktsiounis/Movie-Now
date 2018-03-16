@@ -1,4 +1,4 @@
-package com.example.ntinos.moviesnow.adapter;
+package com.example.ntinos.moviesnow.adapters;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

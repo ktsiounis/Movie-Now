@@ -3,6 +3,7 @@ package com.example.ntinos.moviesnow.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +29,10 @@ public class InfoFragment extends Fragment {
     @BindView(R.id.description) public TextView description;
     @BindView(R.id.title) public TextView title;
     @BindView(R.id.poster) public ImageView poster;
-    @BindView(R.id.favBtn) public ToggleButton favBtn;
+    @BindView(R.id.floatingActionButton) public FloatingActionButton favBtn;
     @BindView(R.id.releaseDate) public TextView releaseDate;
 
-    public static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
+    public static final String BASE_URL = "http://image.tmdb.org/t/p/w780";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +43,7 @@ public class InfoFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         Movie movie = (Movie) getArguments().getSerializable("movie");
-        Log.d("DATE", "onCreate: " + movie.getReleaseDate());
+        Log.d("ID", "onCreate: " + movie.getId());
 
         Picasso.with(getActivity())
                 .load(BASE_URL + movie.getBackdrop())
@@ -58,9 +59,4 @@ public class InfoFragment extends Fragment {
         return view;
     }
 
-    public static InfoFragment newInstance() {
-        InfoFragment fragment = new InfoFragment();
-
-        return fragment;
-    }
 }
