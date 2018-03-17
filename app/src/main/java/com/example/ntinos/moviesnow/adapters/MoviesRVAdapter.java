@@ -22,14 +22,14 @@ import butterknife.ButterKnife;
  * Created by Konstantinos Tsiounis on 20-Feb-18.
  */
 
-public class MoviesCardViewAdapter extends RecyclerView.Adapter<MoviesCardViewAdapter.MovieViewHolder> {
+public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieViewHolder> {
 
     private List<Movie> mMovies;
     private Context mContext;
     public static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
     private ItemClickListener mListener;
 
-    public MoviesCardViewAdapter(List<Movie> mMovies, Context mContext, ItemClickListener mListener) {
+    public MoviesRVAdapter(List<Movie> mMovies, Context mContext, ItemClickListener mListener) {
         this.mMovies = mMovies;
         this.mContext = mContext;
         this.mListener = mListener;

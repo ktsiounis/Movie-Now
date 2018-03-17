@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.ntinos.moviesnow.R;
-import com.example.ntinos.moviesnow.adapters.MoviesCardViewAdapter;
+import com.example.ntinos.moviesnow.adapters.MoviesRVAdapter;
 import com.example.ntinos.moviesnow.model.MoviesResponse;
 import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.rest.APIClient;
@@ -26,11 +26,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements MoviesCardViewAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener {
 
     @BindView(R.id.content_movies)
     public RecyclerView content_moviesRV;
-    private MoviesCardViewAdapter moviesAdapter;
+    private MoviesRVAdapter moviesAdapter;
     private List<Movie> movieList;
     private String API_KEY;
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MoviesCardViewAda
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                moviesAdapter = new MoviesCardViewAdapter(movieList, MainActivity.this, MainActivity.this);
+                moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
                 content_moviesRV.setAdapter(moviesAdapter);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements MoviesCardViewAda
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                moviesAdapter = new MoviesCardViewAdapter(movieList, MainActivity.this, MainActivity.this);
+                moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
                 content_moviesRV.setAdapter(moviesAdapter);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
