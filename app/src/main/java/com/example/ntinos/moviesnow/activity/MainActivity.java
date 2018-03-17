@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.ntinos.moviesnow.R;
-import com.example.ntinos.moviesnow.adapter.MoviesCardViewAdapter;
+import com.example.ntinos.moviesnow.adapters.MoviesCardViewAdapter;
 import com.example.ntinos.moviesnow.model.MoviesResponse;
 import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.rest.APIClient;

@@ -1,4 +1,4 @@
-package com.example.ntinos.moviesnow.adapter;
+package com.example.ntinos.moviesnow.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

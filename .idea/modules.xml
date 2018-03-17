@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Movie-Now.iml" filepath="$PROJECT_DIR$/Movie-Now.iml" />
+      <module fileurl="file://C:\Users\ntino\Documents\MyApps\Movies-Now\Movie-Now.iml" filepath="C:\Users\ntino\Documents\MyApps\Movies-Now\Movie-Now.iml" />
       <module fileurl="file://$PROJECT_DIR$/Movies-Now.iml" filepath="$PROJECT_DIR$/Movies-Now.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
