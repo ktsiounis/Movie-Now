@@ -21,9 +21,11 @@ import butterknife.ButterKnife;
 public class TrailersRVAdapter extends RecyclerView.Adapter<TrailersRVAdapter.TrailersViewHolder> {
 
     private List<Trailer> trailers;
+    private ItemClickListener mListener;
 
-    public TrailersRVAdapter(List<Trailer> trailers) {
+    public TrailersRVAdapter(List<Trailer> trailers, ItemClickListener mListener) {
         this.trailers = trailers;
+        this.mListener = mListener;
     }
 
     @Override
@@ -42,13 +44,24 @@ public class TrailersRVAdapter extends RecyclerView.Adapter<TrailersRVAdapter.Tr
         return trailers.size();
     }
 
-    public class TrailersViewHolder extends RecyclerView.ViewHolder {
+    public class TrailersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.trailer_name) public TextView trailer_name;
 
         public TrailersViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mListener.onItemClickListener(position);
+        }
+    }
+
+    public interface ItemClickListener{
+        void onItemClickListener(int position);
     }
 }

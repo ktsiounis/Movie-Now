@@ -1,5 +1,7 @@
 package com.example.ntinos.moviesnow.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ntinos.moviesnow.R;
+import com.example.ntinos.moviesnow.activity.DetailsActivity;
 import com.example.ntinos.moviesnow.adapters.TrailersRVAdapter;
 import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.model.Trailer;
@@ -28,7 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TrailersFragment extends Fragment {
+public class TrailersFragment extends Fragment implements TrailersRVAdapter.ItemClickListener {
 
     @BindView(R.id.trailersRV) public RecyclerView trailersRV;
     public List<Trailer> trailers;
@@ -64,7 +67,7 @@ public class TrailersFragment extends Fragment {
             @Override
             public void onResponse(Call<TrailersResponse> call, Response<TrailersResponse> response) {
                 trailers = response.body().getTrailers();
-                mTrailersRVAdapter = new TrailersRVAdapter(trailers);
+                mTrailersRVAdapter = new TrailersRVAdapter(trailers, TrailersFragment.this);
                 trailersRV.setAdapter(mTrailersRVAdapter);
             }
 
@@ -73,5 +76,17 @@ public class TrailersFragment extends Fragment {
                 Log.e("ERROR ON RESPONSE", t.toString());
             }
         });
+    }
+
+    @Override
+    public void onItemClickListener(int position) {
+        Uri webpage = Uri.parse(trailers.get(position).getKey());
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        //intent.putExtra("movie", movieList.get(position));
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            startActivity(Intent.createChooser(intent,"Chooser"));
+        }
     }
 }
