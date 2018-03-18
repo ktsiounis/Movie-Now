@@ -2,6 +2,7 @@ package com.example.ntinos.moviesnow.rest;
 
 import com.example.ntinos.moviesnow.model.MoviesResponse;
 import com.example.ntinos.moviesnow.model.ReviewsResponse;
+import com.example.ntinos.moviesnow.model.TrailersResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -21,4 +22,7 @@ public interface RequestInterface {
 
     @GET("movie/{movie_id}/reviews")
     Call<ReviewsResponse> getReviews(@Path("movie_id") int movie_id, @Query("api_key") String KEY);
+
+    @GET("movie/{movie_id}/videos")
+    Call<TrailersResponse> getTrailers(@Path("movie_id") int movie_id, @Query("api_key") String KEY);
 }

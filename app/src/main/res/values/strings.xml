@@ -5,7 +5,5 @@
     <string name="tab_trailers">Trailers</string>
     <string name="tab_reviews">Reviews</string>
     <string name="image_content_descriptor">Movie\'s backdrop</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="play_button_descriptor">play trailer image</string>
 </resources>

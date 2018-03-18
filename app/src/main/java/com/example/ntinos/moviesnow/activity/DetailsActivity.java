@@ -19,6 +19,8 @@ import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.model.MoviesResponse;
 import com.example.ntinos.moviesnow.model.Review;
 import com.example.ntinos.moviesnow.model.ReviewsResponse;
+import com.example.ntinos.moviesnow.model.Trailer;
+import com.example.ntinos.moviesnow.model.TrailersResponse;
 import com.example.ntinos.moviesnow.rest.APIClient;
 import com.example.ntinos.moviesnow.rest.RequestInterface;
 
@@ -41,7 +43,8 @@ public class DetailsActivity extends AppCompatActivity {
 
     public DetailsPagerAdapter mDetailsPagerAdapter;
     public List<Review> reviews;
-    public Bundle infoData, reviewsData, trailerData;
+    public List<Trailer> trailers;
+    public Bundle data;
     public String API_KEY;
 
     @Override
@@ -54,37 +57,16 @@ public class DetailsActivity extends AppCompatActivity {
         Movie movie = (Movie) getIntent().getSerializableExtra("movie");
         setTitle(movie.getTitle());
 
-        fetchReviews(movie);
-
-        infoData = new Bundle();
-        reviewsData = new Bundle();
-        infoData.putSerializable("movie", movie);
+        data = new Bundle();
+        data.putSerializable("movie", movie);
 
         mDetailsPagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager());
-        mDetailsPagerAdapter.addFragment(new InfoFragment(), "Info", infoData);
-        mDetailsPagerAdapter.addFragment(new TrailersFragment(), "Trailers", null);
-        mDetailsPagerAdapter.addFragment(new ReviewsFragment(), "Reviews", reviewsData);
+        mDetailsPagerAdapter.addFragment(new InfoFragment(), "Info", data);
+        mDetailsPagerAdapter.addFragment(new TrailersFragment(), "Trailers", data);
+        mDetailsPagerAdapter.addFragment(new ReviewsFragment(), "Reviews", data);
         mViewPager.setAdapter(mDetailsPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
 
-    }
-
-    public void fetchReviews(Movie movie){
-        RequestInterface requestInterface = APIClient.getClient().create(RequestInterface.class);
-        Call<ReviewsResponse> call = requestInterface.getReviews(movie.getId(), API_KEY);
-
-        call.enqueue(new Callback<ReviewsResponse>() {
-            @Override
-            public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
-                reviews = response.body().getReviews();
-                reviewsData.putSerializable("reviews", (Serializable) reviews);
-            }
-
-            @Override
-            public void onFailure(Call<ReviewsResponse> call, Throwable t) {
-                Log.e("ERROR ON RESPONSE", t.toString());
-            }
-        });
     }
 }
