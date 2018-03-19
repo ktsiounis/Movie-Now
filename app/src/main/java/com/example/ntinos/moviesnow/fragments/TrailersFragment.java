@@ -1,5 +1,6 @@
 package com.example.ntinos.moviesnow.fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,10 +81,12 @@ public class TrailersFragment extends Fragment implements TrailersRVAdapter.Item
 
     @Override
     public void onItemClickListener(int position) {
-        Uri videoURL = Uri.parse("https://www.youtube.com/watch?v=" + trailers.get(position).getKey());
-        Intent intent = new Intent(Intent.ACTION_VIEW, videoURL);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + trailers.get(position).getKey()));
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailers.get(position).getKey()));
+        try{
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException e){
+            startActivity(webIntent);
         }
     }
 }
