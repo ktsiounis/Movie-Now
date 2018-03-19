@@ -80,13 +80,10 @@ public class TrailersFragment extends Fragment implements TrailersRVAdapter.Item
 
     @Override
     public void onItemClickListener(int position) {
-        Uri webpage = Uri.parse(trailers.get(position).getKey());
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        //intent.putExtra("movie", movieList.get(position));
+        Uri videoURL = Uri.parse("https://www.youtube.com/watch?v=" + trailers.get(position).getKey());
+        Intent intent = new Intent(Intent.ACTION_VIEW, videoURL);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
-        } else {
-            startActivity(Intent.createChooser(intent,"Chooser"));
         }
     }
 }
