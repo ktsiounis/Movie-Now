@@ -25,6 +25,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity"/>
         </activity>
+        <provider
+            android:authorities="com.example.ntinos.moviesnow"
+            android:name=".data.FavoritesContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
