@@ -40,7 +40,7 @@ public class FavoriteMoviesRVAdapter extends RecyclerView.Adapter<FavoriteMovies
     @Override
     public void onBindViewHolder(FavoriteMoviesViewHolder holder, int position) {
 
-        int idIndex = mCursor.getColumnIndex(FavoritesContract.FavoritesEntry._ID);
+        int idIndex = mCursor.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_ID);
         int titleIndex = mCursor.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_TITLE);
         int thumbnailIndex = mCursor.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_POSTER);
         int ratingIndex = mCursor.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_RATING);

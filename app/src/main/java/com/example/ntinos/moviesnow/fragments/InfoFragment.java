@@ -2,6 +2,7 @@ package com.example.ntinos.moviesnow.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -61,17 +62,34 @@ public class InfoFragment extends Fragment {
         favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContentValues values = new ContentValues();
 
-                values.put(FavoritesContract.FavoritesEntry.COLUMN_ID, movie.getId());
-                values.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER, movie.getThumbnail());
-                values.put(FavoritesContract.FavoritesEntry.COLUMN_RATING, movie.getVoteAvg());
-                values.put(FavoritesContract.FavoritesEntry.COLUMN_TITLE, movie.getTitle());
+                Cursor cursor = getActivity().getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                                                                    new String[]{FavoritesContract.FavoritesEntry.COLUMN_ID},
+                                                                    "id=?",
+                                                                    new String[]{String.valueOf(movie.getId())},
+                                                                    null);
 
-                Uri uri = getActivity().getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, values);
+                if(cursor.getCount() != 0){
+                    int favoritesDeleted = getActivity().getContentResolver().delete(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                                                                            "id=?",
+                                                                                    new String[]{String.valueOf(movie.getId())});
+                    if(favoritesDeleted > 0){
+                        Toast.makeText(getActivity().getBaseContext(), "Favorite removed", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else {
+                    ContentValues values = new ContentValues();
 
-                if(uri != null){
-                    Toast.makeText(getActivity().getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_ID, movie.getId());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER, movie.getThumbnail());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_RATING, movie.getVoteAvg());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_TITLE, movie.getTitle());
+
+                    Uri uri = getActivity().getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, values);
+
+                    if(uri != null){
+                        Toast.makeText(getActivity().getBaseContext(), "Marked as favorite", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
