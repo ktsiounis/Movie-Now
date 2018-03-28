@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.ntinos.moviesnow.R;
+import com.example.ntinos.moviesnow.adapters.FavoriteMoviesRVAdapter;
 import com.example.ntinos.moviesnow.adapters.MoviesRVAdapter;
 import com.example.ntinos.moviesnow.data.FavoritesContract;
 import com.example.ntinos.moviesnow.model.MoviesResponse;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     @BindView(R.id.content_movies)
     public RecyclerView content_moviesRV;
     private MoviesRVAdapter moviesAdapter;
+    private FavoriteMoviesRVAdapter favoriteMoviesRVAdapter;
     private List<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
@@ -175,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this);
+        content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
     }
 
     @Override
