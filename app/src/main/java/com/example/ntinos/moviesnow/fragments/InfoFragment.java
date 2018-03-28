@@ -1,5 +1,6 @@
 package com.example.ntinos.moviesnow.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.ntinos.moviesnow.R;
 import com.example.ntinos.moviesnow.activity.DetailsActivity;
+import com.example.ntinos.moviesnow.data.FavoritesContract;
 import com.example.ntinos.moviesnow.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +45,7 @@ public class InfoFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        Movie movie = (Movie) getArguments().getSerializable("movie");
+        final Movie movie = (Movie) getArguments().getSerializable("movie");
         Log.d("ID", "onCreate: " + movie.getId());
 
         Picasso.with(getActivity())
@@ -54,6 +57,24 @@ public class InfoFragment extends Fragment {
         description.setText(movie.getDescription());
         title.setText(movie.getTitle());
         releaseDate.setText(movie.getReleaseDate());
+
+        favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues values = new ContentValues();
+
+                values.put(FavoritesContract.FavoritesEntry.COLUMN_ID, movie.getId());
+                values.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER, movie.getThumbnail());
+                values.put(FavoritesContract.FavoritesEntry.COLUMN_RATING, movie.getVoteAvg());
+                values.put(FavoritesContract.FavoritesEntry.COLUMN_TITLE, movie.getTitle());
+
+                Uri uri = getActivity().getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, values);
+
+                if(uri != null){
+                    Toast.makeText(getActivity().getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;

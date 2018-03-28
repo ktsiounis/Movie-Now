@@ -29,7 +29,7 @@ public class FavoritesDBHelper extends SQLiteOpenHelper {
                 FavoritesEntry.COLUMN_ID + " TEXT NOT NULL, "     +
                 FavoritesEntry.COLUMN_TITLE + " TEXT NOT NULL, "  +
                 FavoritesEntry.COLUMN_POSTER + " TEXT NOT NULL, " +
-                FavoritesEntry.COLUMN_RATING + " TEXT NOT NULL);";
+                FavoritesEntry.COLUMN_RATING + " TEXT NOT NULL);" ;
         db.execSQL(CREATE_TABLE);
     }
 
