@@ -35,6 +35,7 @@ public class InfoFragment extends Fragment {
     @BindView(R.id.poster) public ImageView poster;
     @BindView(R.id.floatingActionButton) public FloatingActionButton favBtn;
     @BindView(R.id.releaseDate) public TextView releaseDate;
+    Cursor cursor;
 
     public static final String BASE_URL = "http://image.tmdb.org/t/p/w780";
 
@@ -59,15 +60,22 @@ public class InfoFragment extends Fragment {
         title.setText(movie.getTitle());
         releaseDate.setText(movie.getReleaseDate());
 
+        cursor = getActivity().getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
+                new String[]{FavoritesContract.FavoritesEntry.COLUMN_ID},
+                "id=?",
+                new String[]{String.valueOf(movie.getId())},
+                null);
+
+        if(cursor.getCount() != 0){
+            favBtn.setImageResource(android.R.drawable.btn_star_big_on);
+        }
+        else {
+            favBtn.setImageResource(android.R.drawable.btn_star_big_off);
+        }
+
         favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Cursor cursor = getActivity().getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
-                                                                    new String[]{FavoritesContract.FavoritesEntry.COLUMN_ID},
-                                                                    "id=?",
-                                                                    new String[]{String.valueOf(movie.getId())},
-                                                                    null);
 
                 if(cursor.getCount() != 0){
                     int favoritesDeleted = getActivity().getContentResolver().delete(FavoritesContract.FavoritesEntry.CONTENT_URI,
@@ -76,6 +84,8 @@ public class InfoFragment extends Fragment {
                     if(favoritesDeleted > 0){
                         Toast.makeText(getActivity().getBaseContext(), "Favorite removed", Toast.LENGTH_LONG).show();
                     }
+
+                    favBtn.setImageResource(android.R.drawable.btn_star_big_off);
                 }
                 else {
                     ContentValues values = new ContentValues();
@@ -88,6 +98,7 @@ public class InfoFragment extends Fragment {
                     Uri uri = getActivity().getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, values);
 
                     if(uri != null){
+                        favBtn.setImageResource(android.R.drawable.btn_star_big_on);
                         Toast.makeText(getActivity().getBaseContext(), "Marked as favorite", Toast.LENGTH_LONG).show();
                     }
                 }

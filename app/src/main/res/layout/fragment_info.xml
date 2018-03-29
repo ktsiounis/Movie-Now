@@ -64,11 +64,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:clickable="true"
-                android:src="@android:drawable/btn_star"
+                android:src="@android:drawable/btn_star_big_off"
                 app:backgroundTint="@android:color/holo_red_dark"
                 app:elevation="5dp"
                 app:layout_constraintBottom_toTopOf="@+id/title"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                style="?android:attr/starStyle"/>
 
             <TextView
                 android:id="@+id/description"
