@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.database.Cursor;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,8 +40,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    @BindView(R.id.content_movies)
-    public RecyclerView content_moviesRV;
+    @BindView(R.id.content_movies) public RecyclerView content_moviesRV;
+    @BindView(R.id.activity_main_swipe_refresh_layout) public SwipeRefreshLayout refreshLayout;
     private MoviesRVAdapter moviesAdapter;
     private FavoriteMoviesRVAdapter favoriteMoviesRVAdapter;
     private List<Movie> movieList;
@@ -61,6 +62,24 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
         getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,null, this);
 
+        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
+                                              android.R.color.holo_red_light,
+                                              android.R.color.holo_green_light);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(isOnline()){
+                    fetchPopularMovies();
+                    refreshLayout.setRefreshing(false);
+                }
+                else{
+                    Toast.makeText(MainActivity.this, "No internet connection", Toast.LENGTH_SHORT).show();
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+        });
+
         if(isOnline()){
             fetchPopularMovies();
         }
@@ -68,6 +87,18 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(isOnline()){
+            fetchPopularMovies();
+        }
+        else{
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void fetchPopularMovies(){
