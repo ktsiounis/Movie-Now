@@ -1,6 +1,9 @@
 package com.example.ntinos.moviesnow.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.AsyncTaskLoader;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ntinos.moviesnow.R;
 import com.example.ntinos.moviesnow.adapters.FavoriteMoviesRVAdapter;
@@ -57,7 +61,13 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
         getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,null, this);
 
-        fetchPopularMovies();
+        if(isOnline()){
+            fetchPopularMovies();
+        }
+        else{
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void fetchPopularMovies(){
@@ -184,5 +194,12 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    public boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 }
