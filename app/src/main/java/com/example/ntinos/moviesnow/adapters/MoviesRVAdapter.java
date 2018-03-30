@@ -14,6 +14,7 @@ import com.example.ntinos.moviesnow.R;
 import com.example.ntinos.moviesnow.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,12 +26,12 @@ import butterknife.ButterKnife;
 
 public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieViewHolder> {
 
-    private List<Movie> mMovies;
+    private ArrayList<Movie> mMovies;
     private Context mContext;
     public static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
     private ItemClickListener mListener;
 
-    public MoviesRVAdapter(List<Movie> mMovies, Context mContext, ItemClickListener mListener) {
+    public MoviesRVAdapter(ArrayList<Movie> mMovies, Context mContext, ItemClickListener mListener) {
         this.mMovies = mMovies;
         this.mContext = mContext;
         this.mListener = mListener;
@@ -57,7 +58,7 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_card, parent, false);
+        View card = LayoutInflater.from(mContext).inflate(R.layout.movie_card, parent, false);
         return new MovieViewHolder(card);
     }
 
@@ -78,5 +79,11 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
 
     public interface ItemClickListener{
         void onItemClickListener(int position);
+    }
+
+    public void swapAdapters(ArrayList<Movie> mMovies){
+        this.mMovies = mMovies;
+        Log.d("swapAdapters", "swapAdapters: " + this.mMovies.get(1).getTitle());
+        notifyDataSetChanged();
     }
 }
