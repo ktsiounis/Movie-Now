@@ -24,11 +24,13 @@ public class FavoriteMoviesRVAdapter extends RecyclerView.Adapter<FavoriteMovies
 
     private Cursor mCursor;
     private Context mContext;
+    private ItemClickListener mListener;
     private static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
 
-    public FavoriteMoviesRVAdapter(Cursor mCursor, Context mContext) {
+    public FavoriteMoviesRVAdapter(Cursor mCursor, Context mContext, ItemClickListener mListener) {
         this.mCursor = mCursor;
         this.mContext = mContext;
+        this.mListener = mListener;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class FavoriteMoviesRVAdapter extends RecyclerView.Adapter<FavoriteMovies
         return mCursor.getCount();
     }
 
-    public class FavoriteMoviesViewHolder extends RecyclerView.ViewHolder {
+    public class FavoriteMoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.movie_title) public TextView title;
         @BindView(R.id.ratingBar) public RatingBar rating;
@@ -78,6 +80,17 @@ public class FavoriteMoviesRVAdapter extends RecyclerView.Adapter<FavoriteMovies
         public FavoriteMoviesViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            mListener.onItemClickListener(position);
+        }
+    }
+
+    public interface ItemClickListener{
+        void onItemClickListener(int position);
     }
 }

@@ -47,7 +47,7 @@ public class InfoFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        final Movie movie = (Movie) getArguments().getSerializable("movie");
+        final Movie movie = getArguments().getParcelable("movie");
         Log.d("ID", "onCreate: " + movie.getId());
 
         Picasso.with(getActivity())

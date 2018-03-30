@@ -2,6 +2,7 @@ package com.example.ntinos.moviesnow.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,9 +13,9 @@ public class MoviesResponse {
     @SerializedName("page")
     private int page;
     @SerializedName("results")
-    private List<Movie> movies;
+    private ArrayList<Movie> movies;
 
-    public List<Movie> getMovies() {
+    public ArrayList<Movie> getMovies() {
         return movies;
     }
 
@@ -26,7 +27,7 @@ public class MoviesResponse {
         this.page = page;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(ArrayList<Movie> movies) {
         this.movies = movies;
     }
 }

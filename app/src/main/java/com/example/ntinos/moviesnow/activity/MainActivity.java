@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.AsyncTaskLoader;
@@ -30,6 +32,8 @@ import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.rest.APIClient;
 import com.example.ntinos.moviesnow.rest.RequestInterface;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,13 +42,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, FavoriteMoviesRVAdapter.ItemClickListener {
 
     @BindView(R.id.content_movies) public RecyclerView content_moviesRV;
     @BindView(R.id.activity_main_swipe_refresh_layout) public SwipeRefreshLayout refreshLayout;
     private MoviesRVAdapter moviesAdapter;
     private FavoriteMoviesRVAdapter favoriteMoviesRVAdapter;
-    private List<Movie> movieList;
+    private ArrayList<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
 
@@ -80,26 +84,35 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             }
         });
 
-        if(isOnline()){
-            fetchPopularMovies();
+        if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
+            movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
+            moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
+            content_moviesRV.setAdapter(moviesAdapter);
+            Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + moviesAdapter.getItemCount());
         }
-        else{
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+        else {
+            if(isOnline()){
+                fetchPopularMovies();
+            }
+            else{
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        if(isOnline()){
+//            fetchPopularMovies();
+//        }
+//        else{
+//            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-        if(isOnline()){
-            fetchPopularMovies();
-        }
-        else{
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void fetchPopularMovies(){
 
@@ -140,6 +153,14 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
                 Log.e("ERROR ON RESPONSE", t.toString());
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the fetched movies
+        outState.putParcelableArrayList("MOVIES_DATA", movieList);
+        Log.d("onSaveInstanceState", "onSaveInstanceState: data saved");
     }
 
     @Override
@@ -218,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this);
+        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
         content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
     }
 

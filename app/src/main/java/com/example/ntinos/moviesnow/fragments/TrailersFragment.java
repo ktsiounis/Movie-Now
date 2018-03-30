@@ -53,7 +53,7 @@ public class TrailersFragment extends Fragment implements TrailersRVAdapter.Item
         trailersRV.setItemAnimator(new DefaultItemAnimator());
         trailersRV.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        movie = (Movie) getArguments().getSerializable("movie");
+        movie = getArguments().getParcelable("movie");
         fetchTrailers(movie);
 
         // Inflate the layout for this fragment

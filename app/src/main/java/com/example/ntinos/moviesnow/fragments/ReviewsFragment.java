@@ -53,7 +53,7 @@ public class ReviewsFragment extends Fragment {
         reviewsRV.setItemAnimator(new DefaultItemAnimator());
         reviewsRV.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        movie = (Movie) getArguments().getSerializable("movie");
+        movie = getArguments().getParcelable("movie");
         fetchReviews(movie);
 
         // Inflate the layout for this fragment

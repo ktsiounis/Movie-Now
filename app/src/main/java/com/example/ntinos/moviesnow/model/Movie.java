@@ -1,5 +1,8 @@
 package com.example.ntinos.moviesnow.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,7 +11,7 @@ import java.io.Serializable;
  * Created by Konstantinos Tsiounis on 20/02/2018.
  */
 
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     @SerializedName("original_title")
     private String title;
@@ -97,5 +100,46 @@ public class Movie implements Serializable {
 
     public void setBackdrop(String backdrop) {
         this.backdrop = backdrop;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(thumbnail);
+        parcel.writeString(voteAvg);
+        parcel.writeString(releaseDate);
+        parcel.writeString(backdrop);
+        parcel.writeInt(id);
+    }
+
+    // Method to recreate a Question from a Parcel
+    public static Creator<Movie> CREATOR = new Creator<Movie>() {
+
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+
+    };
+
+    public Movie (Parcel parcel) {
+        this.title = parcel.readString();
+        this.description = parcel.readString();
+        this.thumbnail = parcel.readString();
+        this.voteAvg = parcel.readString();
+        this.releaseDate = parcel.readString();
+        this.backdrop = parcel.readString();
+        this.id = parcel.readInt();
     }
 }

@@ -54,11 +54,11 @@ public class DetailsActivity extends AppCompatActivity {
         API_KEY = getResources().getString(R.string.API_KEY);
         ButterKnife.bind(this);
 
-        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
+        Movie movie = getIntent().getParcelableExtra("movie");
         setTitle(movie.getTitle());
 
         data = new Bundle();
-        data.putSerializable("movie", movie);
+        data.putParcelable("movie", movie);
 
         mDetailsPagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager());
         mDetailsPagerAdapter.addFragment(new InfoFragment(), "Info", data);
