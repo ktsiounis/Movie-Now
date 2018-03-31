@@ -84,16 +84,15 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             }
         });
 
-        movieList = new ArrayList<>();
-        moviesAdapter = new MoviesRVAdapter(movieList, getApplicationContext(), this);
-        content_moviesRV.setAdapter(moviesAdapter);
+        //movieList = new ArrayList<>();
+        //moviesAdapter = new MoviesRVAdapter(movieList, getApplicationContext(), this);
 
         if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
             Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + movieList.get(1).getTitle());
-            moviesAdapter.swapAdapters(movieList);
-            //moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
-            //content_moviesRV.setAdapter(moviesAdapter);
+            //moviesAdapter.swapAdapters(movieList);
+            moviesAdapter = new MoviesRVAdapter(movieList, getApplicationContext(), this);
+            content_moviesRV.setAdapter(moviesAdapter);
         }
         else {
             if(isOnline()){
@@ -103,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
             }
         }
+
+        //content_moviesRV.setAdapter(moviesAdapter);
 
     }
 
@@ -115,9 +116,9 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                moviesAdapter.swapAdapters(movieList);
-                //moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
-                //content_moviesRV.setAdapter(moviesAdapter);
+                //moviesAdapter.swapAdapters(movieList);
+                moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
+                content_moviesRV.setAdapter(moviesAdapter);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
 
