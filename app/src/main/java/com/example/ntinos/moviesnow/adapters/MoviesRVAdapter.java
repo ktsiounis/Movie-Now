@@ -28,11 +28,10 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
 
     private ArrayList<Movie> mMovies;
     private Context mContext;
-    public static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
+    private static final String BASE_URL = "http://image.tmdb.org/t/p/w500";
     private ItemClickListener mListener;
 
-    public MoviesRVAdapter(ArrayList<Movie> mMovies, Context mContext, ItemClickListener mListener) {
-        this.mMovies = mMovies;
+    public MoviesRVAdapter(Context mContext, ItemClickListener mListener) {
         this.mContext = mContext;
         this.mListener = mListener;
     }
@@ -58,7 +57,7 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
 
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View card = LayoutInflater.from(mContext).inflate(R.layout.movie_card, parent, false);
+        View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_card, parent, false);
         return new MovieViewHolder(card);
     }
 
@@ -74,7 +73,8 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
 
     @Override
     public int getItemCount() {
-        return mMovies.size();
+        if(mMovies == null) return 0;
+        else return mMovies.size();
     }
 
     public interface ItemClickListener{

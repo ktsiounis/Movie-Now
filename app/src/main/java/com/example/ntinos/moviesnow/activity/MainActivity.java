@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     private ArrayList<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
+    private Context mainContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         content_moviesRV.setLayoutManager(mLayoutManager);
         content_moviesRV.setItemAnimator(new DefaultItemAnimator());
+        content_moviesRV.setHasFixedSize(true);
 
         getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,null, this);
 
@@ -84,15 +86,17 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             }
         });
 
-        //movieList = new ArrayList<>();
-        //moviesAdapter = new MoviesRVAdapter(movieList, getApplicationContext(), this);
+        mainContext = this;
+
+        moviesAdapter = new MoviesRVAdapter(mainContext, this);
+        content_moviesRV.setAdapter(moviesAdapter);
 
         if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
             Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + movieList.get(1).getTitle());
-            //moviesAdapter.swapAdapters(movieList);
-            moviesAdapter = new MoviesRVAdapter(movieList, getApplicationContext(), this);
-            content_moviesRV.setAdapter(moviesAdapter);
+            moviesAdapter.swapAdapters(movieList);
+            //moviesAdapter = new MoviesRVAdapter(movieList, mainContext, MainActivity.this);
+            //content_moviesRV.setAdapter(moviesAdapter);
         }
         else {
             if(isOnline()){
@@ -102,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
                 Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
             }
         }
-
-        //content_moviesRV.setAdapter(moviesAdapter);
 
     }
 
@@ -116,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                //moviesAdapter.swapAdapters(movieList);
-                moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
-                content_moviesRV.setAdapter(moviesAdapter);
+                moviesAdapter.swapAdapters(movieList);
+                content_moviesRV.invalidate();
+                //moviesAdapter = new MoviesRVAdapter(movieList, mainContext, MainActivity.this);
+                //content_moviesRV.setAdapter(moviesAdapter);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
 
