@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         moviesAdapter = new MoviesRVAdapter(this, this);
         content_moviesRV.setAdapter(moviesAdapter);
 
-        getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,null, this);
-
         refreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
                                               android.R.color.holo_red_light,
                                               android.R.color.holo_green_light);
@@ -91,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
             Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + movieList.get(1).getTitle());
             moviesAdapter.swapAdapters(movieList);
-            //moviesAdapter = new MoviesRVAdapter(movieList, mainContext, MainActivity.this);
-            //content_moviesRV.setAdapter(moviesAdapter);
         }
         else {
             if(isOnline()){
@@ -167,9 +163,11 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.orderByPopular:
+                content_moviesRV.setAdapter(moviesAdapter);
                 fetchPopularMovies();
                 return true;
             case R.id.orderByTopRated:
+                content_moviesRV.setAdapter(moviesAdapter);
                 fetchTopRatedMovies();
                 return true;
             case R.id.favorites:
@@ -209,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public Cursor loadInBackground() {
                 try {
+                    Log.d("AsyncTaskLoader", "asynchronously load data.");
                     return getContentResolver().query(FavoritesContract.FavoritesEntry.CONTENT_URI,
                             null,
                             null,
@@ -232,8 +231,9 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
-        //content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
+        Log.d("LoadFinished", "onLoadFinished: " + data.getCount());
+        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
+        content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
     }
 
     @Override
