@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         content_moviesRV.setLayoutManager(mLayoutManager);
         content_moviesRV.setItemAnimator(new DefaultItemAnimator());
         content_moviesRV.setHasFixedSize(true);
+        moviesAdapter = new MoviesRVAdapter(this, this);
+        content_moviesRV.setAdapter(moviesAdapter);
 
         getSupportLoaderManager().initLoader(FAVORITES_LOADER_ID,null, this);
 
@@ -85,11 +87,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
                 }
             }
         });
-
-        mainContext = this;
-
-        moviesAdapter = new MoviesRVAdapter(mainContext, this);
-        content_moviesRV.setAdapter(moviesAdapter);
 
         if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
@@ -119,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
                 moviesAdapter.swapAdapters(movieList);
-                content_moviesRV.invalidate();
                 //moviesAdapter = new MoviesRVAdapter(movieList, mainContext, MainActivity.this);
                 //content_moviesRV.setAdapter(moviesAdapter);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
