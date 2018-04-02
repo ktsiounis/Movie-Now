@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     private ArrayList<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
-    private Context mainContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

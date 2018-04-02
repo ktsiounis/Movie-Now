@@ -81,8 +81,15 @@ public class MoviesRVAdapter extends RecyclerView.Adapter<MoviesRVAdapter.MovieV
         void onItemClickListener(int position);
     }
 
-    public void swapAdapters(ArrayList<Movie> mMovies){
-        this.mMovies = mMovies;
+    public void swapAdapters(ArrayList<Movie> movies){
+        if(mMovies != null){
+            mMovies.clear();
+            mMovies.addAll(movies);
+        }
+        else {
+            mMovies = movies;
+        }
+
         Log.d("swapAdapters", "swapAdapters: " + this.mMovies.get(1).getTitle());
         notifyDataSetChanged();
     }
