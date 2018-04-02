@@ -232,8 +232,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
-        content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
+        //favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
+        //content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
     }
 
     @Override
