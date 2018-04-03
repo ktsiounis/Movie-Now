@@ -25,10 +25,14 @@ public class FavoritesDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         final String CREATE_TABLE = "CREATE TABLE " + FavoritesEntry.TABLE_NAME + " (" +
-                FavoritesEntry.COLUMN_ID + " TEXT PRIMARY KEY, "  +
-                FavoritesEntry.COLUMN_TITLE + " TEXT NOT NULL, "  +
-                FavoritesEntry.COLUMN_POSTER + " TEXT NOT NULL, " +
-                FavoritesEntry.COLUMN_RATING + " TEXT NOT NULL);" ;
+                FavoritesEntry.COLUMN_ID          + " TEXT PRIMARY KEY, "  +
+                FavoritesEntry.COLUMN_TITLE       + " TEXT NOT NULL, "     +
+                FavoritesEntry.COLUMN_POSTER      + " TEXT NOT NULL, "     +
+                FavoritesEntry.COLUMN_RATING      + " TEXT NOT NULL, "     +
+                FavoritesEntry.COLUMN_RELEASEDATE + " TEXT NOT NULL, "     +
+                FavoritesEntry.COLUMN_BACKDROP    + " TEXT NOT NULL, "     +
+                FavoritesEntry.COLUMN_ADULT       + " TEXT NOT NULL , "    +
+                FavoritesEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL);"     ;
         db.execSQL(CREATE_TABLE);
     }
 

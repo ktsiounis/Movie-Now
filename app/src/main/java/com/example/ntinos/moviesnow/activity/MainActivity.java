@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.AsyncTaskLoader;
@@ -24,7 +22,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.ntinos.moviesnow.R;
-import com.example.ntinos.moviesnow.adapters.FavoriteMoviesRVAdapter;
 import com.example.ntinos.moviesnow.adapters.MoviesRVAdapter;
 import com.example.ntinos.moviesnow.data.FavoritesContract;
 import com.example.ntinos.moviesnow.model.MoviesResponse;
@@ -32,9 +29,7 @@ import com.example.ntinos.moviesnow.model.Movie;
 import com.example.ntinos.moviesnow.rest.APIClient;
 import com.example.ntinos.moviesnow.rest.RequestInterface;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,12 +37,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener, LoaderManager.LoaderCallbacks<Cursor>, FavoriteMoviesRVAdapter.ItemClickListener {
+public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.ItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.content_movies) public RecyclerView content_moviesRV;
     @BindView(R.id.activity_main_swipe_refresh_layout) public SwipeRefreshLayout refreshLayout;
     private MoviesRVAdapter moviesAdapter;
-    private FavoriteMoviesRVAdapter favoriteMoviesRVAdapter;
     private ArrayList<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
@@ -88,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
             Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + movieList.get(1).getTitle());
-            moviesAdapter.swapAdapters(movieList);
+            moviesAdapter.swapList(movieList);
         }
         else {
             if(isOnline()){
@@ -110,9 +104,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                moviesAdapter.swapAdapters(movieList);
-                //moviesAdapter = new MoviesRVAdapter(movieList, mainContext, MainActivity.this);
-                //content_moviesRV.setAdapter(moviesAdapter);
+                moviesAdapter.swapList(movieList);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
 
@@ -131,9 +123,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 movieList = response.body().getMovies();
-                moviesAdapter.swapAdapters(movieList);
-                //moviesAdapter = new MoviesRVAdapter(movieList, MainActivity.this, MainActivity.this);
-                //content_moviesRV.setAdapter(moviesAdapter);
+                moviesAdapter.swapList(movieList);
                 Log.d("RESPONSE", "Number of movies received: " + movieList.size());
             }
 
@@ -182,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     public void onItemClickListener(int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("movie", movieList.get(position));
-        startActivity(intent);
+        startActivityForResult(intent, 2);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -231,9 +221,33 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        ArrayList<Movie> movies = new ArrayList<>();
         Log.d("LoadFinished", "onLoadFinished: " + data.getCount());
-        favoriteMoviesRVAdapter = new FavoriteMoviesRVAdapter(data, MainActivity.this, MainActivity.this);
-        content_moviesRV.setAdapter(favoriteMoviesRVAdapter);
+
+        int idIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_ID);
+        int titleIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_TITLE);
+        int thumbnailIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_POSTER);
+        int ratingIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_RATING);
+        int descriptionIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_DESCRIPTION);
+        int releaseDateIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_RELEASEDATE);
+        int backdropIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_BACKDROP);
+        int adultIndex = data.getColumnIndex(FavoritesContract.FavoritesEntry.COLUMN_ADULT);
+
+        data.moveToFirst();
+        while (!data.isAfterLast()){
+            movies.add(new Movie(data.getString(titleIndex),
+                    data.getString(descriptionIndex),
+                    data.getString(thumbnailIndex),
+                    data.getString(ratingIndex),
+                    data.getString(releaseDateIndex),
+                    Boolean.parseBoolean(data.getString(adultIndex)),
+                    data.getString(backdropIndex),
+                    data.getInt(idIndex)));
+
+            data.moveToNext();
+        }
+
+        moviesAdapter.swapList(movies);
     }
 
     @Override
@@ -246,5 +260,14 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 2){
+
+        }
     }
 }

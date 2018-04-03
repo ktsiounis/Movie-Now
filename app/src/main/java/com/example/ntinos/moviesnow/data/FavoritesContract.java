@@ -32,6 +32,10 @@ public class FavoritesContract {
         public static final String COLUMN_ID = "id";
         public static final String COLUMN_POSTER = "poster";
         public static final String COLUMN_RATING = "rating";
+        public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_RELEASEDATE = "releaseDate";
+        public static final String COLUMN_ADULT = "adult";
+        public static final String COLUMN_BACKDROP = "backdrop";
 
     }
 

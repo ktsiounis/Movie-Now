@@ -83,9 +83,9 @@ public class InfoFragment extends Fragment {
                                                                                     new String[]{String.valueOf(movie.getId())});
                     if(favoritesDeleted > 0){
                         Toast.makeText(getActivity().getBaseContext(), "Favorite removed", Toast.LENGTH_LONG).show();
+                        favBtn.setImageResource(android.R.drawable.btn_star_big_off);
                     }
 
-                    favBtn.setImageResource(android.R.drawable.btn_star_big_off);
                 }
                 else {
                     ContentValues values = new ContentValues();
@@ -94,6 +94,10 @@ public class InfoFragment extends Fragment {
                     values.put(FavoritesContract.FavoritesEntry.COLUMN_POSTER, movie.getThumbnail());
                     values.put(FavoritesContract.FavoritesEntry.COLUMN_RATING, movie.getVoteAvg());
                     values.put(FavoritesContract.FavoritesEntry.COLUMN_TITLE, movie.getTitle());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_DESCRIPTION, movie.getDescription());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_RELEASEDATE, movie.getReleaseDate());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_BACKDROP, movie.getBackdrop());
+                    values.put(FavoritesContract.FavoritesEntry.COLUMN_ADULT, String.valueOf(movie.getAdult()));
 
                     Uri uri = getActivity().getContentResolver().insert(FavoritesContract.FavoritesEntry.CONTENT_URI, values);
 
