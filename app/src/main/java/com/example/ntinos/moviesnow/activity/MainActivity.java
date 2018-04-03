@@ -266,8 +266,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 2){
-
+        if(requestCode == 2 && resultCode == 2){
+            getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null,this);
         }
     }
 }

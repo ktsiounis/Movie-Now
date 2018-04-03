@@ -84,6 +84,7 @@ public class InfoFragment extends Fragment {
                     if(favoritesDeleted > 0){
                         Toast.makeText(getActivity().getBaseContext(), "Favorite removed", Toast.LENGTH_LONG).show();
                         favBtn.setImageResource(android.R.drawable.btn_star_big_off);
+                        getActivity().setResult(2);
                     }
 
                 }
@@ -104,6 +105,7 @@ public class InfoFragment extends Fragment {
                     if(uri != null){
                         favBtn.setImageResource(android.R.drawable.btn_star_big_on);
                         Toast.makeText(getActivity().getBaseContext(), "Marked as favorite", Toast.LENGTH_LONG).show();
+                        getActivity().setResult(2);
                     }
                 }
             }
