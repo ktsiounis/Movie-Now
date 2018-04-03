@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     private ArrayList<Movie> movieList;
     private String API_KEY;
     private static final int FAVORITES_LOADER_ID = 0;
+    private int menuItemCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,16 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             @Override
             public void onRefresh() {
                 if(isOnline()){
-                    fetchPopularMovies();
+                    switch (menuItemCode) {
+                        case 1:
+                            fetchPopularMovies();
+                            break;
+                        case 2:
+                            fetchTopRatedMovies();
+                            break;
+                        default:
+                            getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null, MainActivity.this);
+                    }
                     refreshLayout.setRefreshing(false);
                 }
                 else{
@@ -81,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
 
         if(savedInstanceState != null && savedInstanceState.containsKey("MOVIES_DATA")){
             movieList = savedInstanceState.getParcelableArrayList("MOVIES_DATA");
-            Log.d("onSaveInstanceState", "onCreate: data retrieved from saveInstanceState " + movieList.get(1).getTitle());
             moviesAdapter.swapList(movieList);
+            content_moviesRV.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable("LIST_STATE"));
         }
         else {
             if(isOnline()){
@@ -139,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
         super.onSaveInstanceState(outState);
         // Save the fetched movies
         outState.putParcelableArrayList("MOVIES_DATA", movieList);
+        outState.putParcelable("LIST_STATE", content_moviesRV.getLayoutManager().onSaveInstanceState());
         Log.d("onSaveInstanceState", "onSaveInstanceState: data saved");
     }
 
@@ -155,13 +166,16 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             case R.id.orderByPopular:
                 content_moviesRV.setAdapter(moviesAdapter);
                 fetchPopularMovies();
+                menuItemCode = 1;
                 return true;
             case R.id.orderByTopRated:
                 content_moviesRV.setAdapter(moviesAdapter);
                 fetchTopRatedMovies();
+                menuItemCode = 2;
                 return true;
             case R.id.favorites:
                 getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null,this);
+                menuItemCode = 3;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -172,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     public void onItemClickListener(int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("movie", movieList.get(position));
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, menuItemCode);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -247,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
             data.moveToNext();
         }
 
+        if(movieList != null){
+            movieList.clear();
+            movieList.addAll(movies);
+        }
+
         moviesAdapter.swapList(movies);
     }
 
@@ -266,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements MoviesRVAdapter.I
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 2 && resultCode == 2){
+        if(requestCode == 3 && resultCode == 2){
             getSupportLoaderManager().restartLoader(FAVORITES_LOADER_ID, null,this);
         }
     }
